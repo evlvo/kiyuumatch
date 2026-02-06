@@ -131,6 +131,7 @@ const App: React.FC = () => {
                   src={lastMatch.profile.videoUrl} 
                   className="w-full h-full rounded-full object-cover" 
                   muted autoPlay loop playsInline 
+                  referrerPolicy="no-referrer"
                 />
               </div>
             </div>

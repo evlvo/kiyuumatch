@@ -39,7 +39,7 @@ const SwipeCard: React.FC<SwipeCardProps> = ({ profile, onSwipe, isTop }) => {
         });
       }
     }
-  }, [isTop, videoError]);
+  }, [isTop, videoError, profile.videoUrl]);
 
   const formatTime = (seconds: number) => {
     const m = Math.floor(seconds / 60);
@@ -89,7 +89,6 @@ const SwipeCard: React.FC<SwipeCardProps> = ({ profile, onSwipe, isTop }) => {
   };
 
   const rotation = currentX / 10;
-  const opacity = Math.min(Math.abs(currentX) / 100, 1);
 
   return (
     <div
@@ -110,7 +109,7 @@ const SwipeCard: React.FC<SwipeCardProps> = ({ profile, onSwipe, isTop }) => {
     >
       <div className="relative w-full h-full rounded-[32px] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.3)] bg-black flex items-center justify-center">
         
-        {/* 動画本体 */}
+        {/* 動画本体: crossOriginを削除し、referrerPolicyを追加 */}
         <video
           key={profile.videoUrl}
           ref={videoRef}
@@ -121,14 +120,14 @@ const SwipeCard: React.FC<SwipeCardProps> = ({ profile, onSwipe, isTop }) => {
           playsInline
           autoPlay
           preload="auto"
-          crossOrigin="anonymous"
+          referrerPolicy="no-referrer"
           onLoadedData={() => {
             setIsLoading(false);
             setVideoError(null);
           }}
           onError={(e) => {
             console.error("Video Error:", (e.target as HTMLVideoElement).error);
-            setVideoError("動画ファイルの読み込みに失敗しました。URLが正しいか確認してください。");
+            setVideoError("動画の読み込みに失敗しました。サーバーの制限か、URLが無効です。");
             setIsLoading(false);
           }}
         />
@@ -136,19 +135,16 @@ const SwipeCard: React.FC<SwipeCardProps> = ({ profile, onSwipe, isTop }) => {
         {/* --- ビデオ通話オーバーレイUI --- */}
         {!isLoading && !videoError && (
           <div className="absolute inset-0 pointer-events-none flex flex-col justify-between p-6">
-            {/* 上部: タイマーとインカメラ */}
             <div className="flex justify-between items-start">
               <div className="bg-black/20 backdrop-blur-md px-3 py-1 rounded-full flex items-center gap-2 border border-white/20">
                 <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
                 <span className="text-white text-sm font-mono tracking-tighter">{formatTime(time)}</span>
               </div>
               <div className="w-24 h-32 bg-zinc-800 rounded-xl overflow-hidden border-2 border-white/30 shadow-xl">
-                 {/* 自分のワイプ（ここでは静止画やカメラを表示可能） */}
                  <img src="https://picsum.photos/seed/me/200/300" className="w-full h-full object-cover grayscale-[0.2]" alt="me" />
               </div>
             </div>
 
-            {/* 下部: 操作ボタン */}
             <div className="flex flex-col items-center gap-6 pb-20">
               <div className="flex items-center gap-5 pointer-events-auto">
                 <button className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center text-white">
