@@ -1,0 +1,8 @@
+{
+  "name": "スワイプマッチ LP",
+  "description": "モダンなマッチングアプリをイメージした、ビデオをスワイプしてマッチングを体験できる高コンバージョンLP。",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
