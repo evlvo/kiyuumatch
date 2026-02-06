@@ -1,4 +1,3 @@
-
 import React, { useRef, useState, useEffect } from 'react';
 import { Profile } from '../types';
 import { Info, AlertCircle, RefreshCw, Mic, PhoneOff, Video, FlipHorizontal, Timer } from 'lucide-react';
@@ -109,7 +108,6 @@ const SwipeCard: React.FC<SwipeCardProps> = ({ profile, onSwipe, isTop }) => {
     >
       <div className="relative w-full h-full rounded-[32px] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.3)] bg-black flex items-center justify-center">
         
-        {/* 動画本体: crossOriginを削除し、referrerPolicyを追加 */}
         <video
           key={profile.videoUrl}
           ref={videoRef}
@@ -120,14 +118,13 @@ const SwipeCard: React.FC<SwipeCardProps> = ({ profile, onSwipe, isTop }) => {
           playsInline
           autoPlay
           preload="auto"
-          referrerPolicy="no-referrer"
           onLoadedData={() => {
             setIsLoading(false);
             setVideoError(null);
           }}
           onError={(e) => {
             console.error("Video Error:", (e.target as HTMLVideoElement).error);
-            setVideoError("動画の読み込みに失敗しました。サーバーの制限か、URLが無効です。");
+            setVideoError("動画の読み込みに失敗しました。ファイルがリポジトリ内に存在するか確認してください。");
             setIsLoading(false);
           }}
         />
@@ -161,7 +158,6 @@ const SwipeCard: React.FC<SwipeCardProps> = ({ profile, onSwipe, isTop }) => {
           </div>
         )}
 
-        {/* Loading/Error State */}
         {(isLoading || videoError) && (
           <div className="absolute inset-0 bg-zinc-900 flex flex-col items-center justify-center z-20 text-center p-6">
             {isLoading && !videoError ? (
@@ -179,7 +175,6 @@ const SwipeCard: React.FC<SwipeCardProps> = ({ profile, onSwipe, isTop }) => {
           </div>
         )}
 
-        {/* スワイプ時のラベル */}
         {isDragging && currentX > 50 && (
           <div className="absolute inset-0 bg-green-500/20 z-30 flex items-center justify-center">
              <div className="border-[8px] border-green-500 text-green-500 font-black text-6xl px-8 py-4 rounded-3xl rotate-[-12deg] bg-black/20">スキ</div>
@@ -191,7 +186,6 @@ const SwipeCard: React.FC<SwipeCardProps> = ({ profile, onSwipe, isTop }) => {
           </div>
         )}
 
-        {/* 下部のプロフィール情報 */}
         <div className="absolute inset-x-0 bottom-0 p-8 pt-20 swipe-gradient pointer-events-none z-10">
           <div className="flex items-end justify-between mb-2">
             <div>
